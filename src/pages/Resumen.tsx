@@ -67,10 +67,14 @@ function Resumen() {
       ) : (
         <>
           <div className="resumen-total">
-            <h3>Total General</h3>
-            <p className="total-cantidad">S/. {totalGeneral.toFixed(2)}</p>
-            <p className="total-gastos">Total de gastos registrados: {gastos.length}</p>
-          </div>
+  <h3>Total General</h3>
+  <p className="total-cantidad">S/. {totalGeneral.toFixed(2)}</p>
+  <p className="total-gastos">Total de gastos registrados: {gastos.length}</p>
+  <p className="gasto-promedio">
+    Gasto promedio: S/. {(totalGeneral / gastos.length).toFixed(2)}
+  </p>
+</div>
+
 
           <div className="resumen-categorias">
             <h3>Gastos por Categoría</h3>

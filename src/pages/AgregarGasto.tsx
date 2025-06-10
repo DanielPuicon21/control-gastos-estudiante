@@ -13,28 +13,38 @@ function AgregarGasto() {
   })
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (formData.descripcion && formData.cantidad) {
-      const nuevoGasto: Gasto = {
-        id: Date.now().toString(),
-        descripcion: formData.descripcion,
-        cantidad: parseFloat(formData.cantidad),
-        categoria: formData.categoria,
-        fecha: formData.fecha
-      }
-      
-      const gastosGuardados = localStorage.getItem('gastos')
-      const gastos = gastosGuardados ? JSON.parse(gastosGuardados) : []
-      gastos.push(nuevoGasto)
-      localStorage.setItem('gastos', JSON.stringify(gastos))
-      
-      alert('Gasto agregado exitosamente!')
-      navigate('/lista')
-    } else {
-      alert('Por favor completa todos los campos')
-    }
+  e.preventDefault()
+
+  const descripcionValida = formData.descripcion.trim().length >= 3
+  const cantidadValida = parseFloat(formData.cantidad) > 0
+
+  if (!descripcionValida) {
+    alert('La descripción debe tener al menos 3 caracteres.')
+    return
   }
+
+  if (!cantidadValida) {
+    alert('La cantidad debe ser mayor a 0.')
+    return
+  }
+
+  const nuevoGasto: Gasto = {
+    id: Date.now().toString(),
+    descripcion: formData.descripcion.trim(),
+    cantidad: parseFloat(formData.cantidad),
+    categoria: formData.categoria,
+    fecha: formData.fecha
+  }
+
+  const gastosGuardados = localStorage.getItem('gastos')
+  const gastos = gastosGuardados ? JSON.parse(gastosGuardados) : []
+  gastos.push(nuevoGasto)
+  localStorage.setItem('gastos', JSON.stringify(gastos))
+
+  alert('¡Gasto agregado exitosamente!')
+  navigate('/lista')
+}
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -85,6 +95,7 @@ function AgregarGasto() {
             <option value="transporte">Transporte</option>
             <option value="entretenimiento">Entretenimiento</option>
             <option value="estudios">Estudios</option>
+              <option value="salud">Salud</option>
             <option value="otros">Otros</option>
           </select>
         </div>

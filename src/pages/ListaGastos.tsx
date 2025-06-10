@@ -30,11 +30,22 @@ function ListaGastos() {
     })
     setGastos(gastosOrdenados)
   }
+  const limpiarTodosLosGastos = () => {
+  if (confirm('¿Estás seguro de eliminar *todos* los gastos? Esta acción no se puede deshacer.')) {
+    localStorage.removeItem('gastos')
+    setGastos([])
+  }
+}
 
   return (
     <div className="lista-gastos-container">
       <h2>Lista de Gastos</h2>
-      
+
+{gastos.length > 0 && (
+  <button onClick={limpiarTodosLosGastos} className="boton-peligro">
+    Limpiar Todos los Gastos
+  </button>
+)}
       {gastos.length === 0 ? (
         <div className="sin-gastos">
           <p>No hay gastos registrados todavía.</p>

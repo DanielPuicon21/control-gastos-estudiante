@@ -6,14 +6,14 @@ interface GastoItemProps {
 }
 
 function GastoItem({ gasto, onEliminar }: GastoItemProps) {
-  const formatearFecha = (fecha: string) => {
-    const date = new Date(fecha)
-    return date.toLocaleDateString('es-PE', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
-    })
-  }
+const formatearFecha = (fecha: string) => {
+  const date = new Date(fecha)
+  const dia = String(date.getDate()).padStart(2, '0')
+  const mes = String(date.getMonth() + 1).padStart(2, '0')
+  const anio = date.getFullYear()
+  return `${dia}/${mes}/${anio}`
+}
+
 
   const obtenerEmoji = (categoria: string) => {
     const emojis = {

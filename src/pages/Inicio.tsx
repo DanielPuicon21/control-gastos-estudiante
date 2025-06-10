@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 function Inicio() {
   return (
     <div className="inicio-container">
-      <h2>Bienvenido al Control de Gastos</h2>
+      <h2>Mi Gestor de Gastos Personales</h2>
       <p>Esta aplicación te ayudará a llevar un registro de tus gastos como estudiante.</p>
       
       <div className="opciones">
