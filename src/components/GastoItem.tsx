@@ -6,14 +6,13 @@ interface GastoItemProps {
 }
 
 function GastoItem({ gasto, onEliminar }: GastoItemProps) {
-const formatearFecha = (fecha: string) => {
-  const date = new Date(fecha)
-  const dia = String(date.getDate()).padStart(2, '0')
-  const mes = String(date.getMonth() + 1).padStart(2, '0')
-  const anio = date.getFullYear()
-  return `${dia}/${mes}/${anio}`
-}
-
+  const formatearFecha = (fecha: string) => {
+    const date = new Date(fecha)
+    const dia = String(date.getDate()).padStart(2, '0')
+    const mes = String(date.getMonth() + 1).padStart(2, '0')
+    const anio = date.getFullYear()
+    return `${dia}/${mes}/${anio}`
+  }
 
   const obtenerEmoji = (categoria: string) => {
     const emojis = {
@@ -21,13 +20,34 @@ const formatearFecha = (fecha: string) => {
       transporte: '🚌',
       entretenimiento: '🎮',
       estudios: '📚',
+      salud: '🩺',
       otros: '📌'
     }
     return emojis[categoria as keyof typeof emojis] || '📌'
   }
 
+  const coloresCategoria: Record<Gasto['categoria'], string> = {
+    comida: '#FFF3E0',
+    transporte: '#E3F2FD',
+    entretenimiento: '#FCE4EC',
+    estudios: '#E8F5E9',
+    salud: '#F3E5F5',
+    otros: '#ECEFF1',
+  }
+
+  const estiloItem: React.CSSProperties = {
+    backgroundColor: coloresCategoria[gasto.categoria],
+    border: gasto.cantidad > 50 ? '2px solid #d32f2f' : '1px solid #ccc',
+    borderRadius: '10px',
+    padding: '12px',
+    marginBottom: '12px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  }
+
   return (
-    <div className="gasto-item">
+    <div className="gasto-item" style={estiloItem}>
       <div className="gasto-info">
         <div className="gasto-header">
           <span className="gasto-emoji">{obtenerEmoji(gasto.categoria)}</span>

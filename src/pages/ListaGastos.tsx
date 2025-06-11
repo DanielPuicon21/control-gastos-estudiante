@@ -4,6 +4,7 @@ import GastoItem from '../components/GastoItem'
 
 function ListaGastos() {
   const [gastos, setGastos] = useState<Gasto[]>([])
+  const [categoriaFiltro, setCategoriaFiltro] = useState('todas')
 
   useEffect(() => {
     const gastosGuardados = localStorage.getItem('gastos')
@@ -19,6 +20,7 @@ function ListaGastos() {
       localStorage.setItem('gastos', JSON.stringify(nuevosGastos))
     }
   }
+  
 
   const ordenarGastos = (criterio: 'fecha' | 'cantidad') => {
     const gastosOrdenados = [...gastos].sort((a, b) => {
@@ -30,22 +32,30 @@ function ListaGastos() {
     })
     setGastos(gastosOrdenados)
   }
+
   const limpiarTodosLosGastos = () => {
-  if (confirm('¿Estás seguro de eliminar *todos* los gastos? Esta acción no se puede deshacer.')) {
-    localStorage.removeItem('gastos')
-    setGastos([])
+    if (confirm('¿Estás seguro de eliminar *todos* los gastos? Esta acción no se puede deshacer.')) {
+      localStorage.removeItem('gastos')
+      setGastos([])
+    }
   }
-}
+
+  const gastosFiltrados = gastos.filter(
+    gasto => categoriaFiltro === 'todas' || gasto.categoria === categoriaFiltro
+  )
+
+  const categorias = ['todas', ...Array.from(new Set(gastos.map(g => g.categoria)))]
 
   return (
     <div className="lista-gastos-container">
       <h2>Lista de Gastos</h2>
 
-{gastos.length > 0 && (
-  <button onClick={limpiarTodosLosGastos} className="boton-peligro">
-    Limpiar Todos los Gastos
-  </button>
-)}
+      {gastos.length > 0 && (
+        <button onClick={limpiarTodosLosGastos} className="boton-peligro">
+          Limpiar Todos los Gastos
+        </button>
+      )}
+
       {gastos.length === 0 ? (
         <div className="sin-gastos">
           <p>No hay gastos registrados todavía.</p>
@@ -55,6 +65,7 @@ function ListaGastos() {
         <>
           <div className="controles-lista">
             <p>Total de gastos: {gastos.length}</p>
+
             <div className="botones-orden">
               <button onClick={() => ordenarGastos('fecha')} className="boton-pequeño">
                 Ordenar por fecha
@@ -63,10 +74,23 @@ function ListaGastos() {
                 Ordenar por cantidad
               </button>
             </div>
+
+            <div className="filtro-categoria">
+              <label htmlFor="filtro">Filtrar por categoría: </label>
+              <select
+                id="filtro"
+                value={categoriaFiltro}
+                onChange={(e) => setCategoriaFiltro(e.target.value)}
+              >
+                {categorias.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="lista-gastos">
-            {gastos.map(gasto => (
+            {gastosFiltrados.map(gasto => (
               <GastoItem 
                 key={gasto.id}
                 gasto={gasto}
